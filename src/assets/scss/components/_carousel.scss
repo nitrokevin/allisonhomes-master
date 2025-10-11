@@ -63,24 +63,7 @@
     margin-left: 0;
 
     .swiper-slide {
-      .image {
-        padding-bottom: 120%;
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-
-        @include breakpoint(medium) {
-          padding-bottom: 65%;
-        }
-
-        @include breakpoint(large) {
-          padding-bottom: 70%;
-        }
-
-        @include breakpoint(xlarge) {
-          padding-bottom: 60%;
-        }
-      }
+     
     }
   }
 }
@@ -89,32 +72,7 @@
   width: 100%;
  
 }
-.left .slide-carousel {
-  .swiper-wrapper {
-    margin-left: 0;
 
-    .swiper-slide {
-      .image {
-        padding-bottom: 120%;
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-
-        @include breakpoint(medium) {
-          padding-bottom: 80%;
-        }
-
-        @include breakpoint(large) {
-          padding-bottom: 100%;
-        }
-
-        @include breakpoint(xlarge) {
-          padding-bottom: 100%;
-        }
-      }
-    }
-  }
-}
 
 .people-carousel.alignfull {
   margin-left: calc(-50vw + 50%);

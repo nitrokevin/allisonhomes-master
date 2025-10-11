@@ -70,24 +70,30 @@
 $global-font-size: 100%;
 $global-width: rem-calc(1260);
 $global-lineheight: 1.5;
+
 $foundation-palette: (
-  primary: #24382C,
-  secondary: #E1C789,
+  primary: #5d576b,
+  secondary: #B88E00,
   success: #3adb76,
   warning: #ffae00,
   alert: #cc4b37,
   light-gray: #e6e6e6,
   medium-gray: #cacaca,
   dark-gray: #4A4A4A,
-  theme-color-1:#ADD6C2,
-  theme-color-2 : #525D8D,
-  theme-color-3: #DEE8F1,
-  theme-color-4: #8C3C40,
+  theme-color-1:#7ea799,
+  theme-color-2 : #F1DEDE,
+  theme-color-3: #E3BABA,
+  theme-color-4: #FFEDA8,
+   theme-color-5: #8D2D43,
+  "white": #fefefe,
+  "black":#00050C,
 );
+
 $theme-color-1:get-color(theme-color-1);
 $theme-color-2 : get-color(theme-color-2);
 $theme-color-3: get-color(theme-color-3);
 $theme-color-4: get-color(theme-color-4);
+$theme-color-5: get-color(theme-color-5);
 $light-gray:  get-color(light-gray);
 $medium-gray:get-color(medium-gray);
 $dark-gray: get-color(dark-gray);
@@ -95,7 +101,7 @@ $black: #0a0a0a;
 $white: #fefefe;
 $body-background: $white;
 $body-font-color: $black;
-$body-font-family: 'Nunito Sans', Helvetica, Roboto, Arial, sans-serif;
+$body-font-family: 'Lato', Helvetica, Roboto, Arial, sans-serif;
 $body-safe-padding: false;
 $body-antialiased: true;
 $global-margin: 1rem;
@@ -454,7 +460,7 @@ $dropdownmenu-padding: $global-menu-padding;
 $dropdownmenu-nested-margin: 0;
 $dropdownmenu-submenu-padding: $dropdownmenu-padding;
 $dropdownmenu-border: 1px solid $medium-gray;
-$dropdown-menu-item-color-active: get-color(primary);
+$dropdown-menu-item-color-active: get-color(secondary);
 $dropdown-menu-item-background-active: transparent;
 
 // 19. Flexbox Utilities

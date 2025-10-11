@@ -9,7 +9,8 @@
     background-size: cover;
     background-position: bottom;
     padding: rem-calc(65%) 0;
-    margin: 0 0 rem-calc(32);
+    height: rem-calc(300);
+    margin: 0;
     height: auto;
     position: relative;
     text-align: left;
@@ -18,9 +19,14 @@
   @include breakpoint(medium) {
     background-size: cover;
     background-position: center;
-    height: rem-calc(600);
-    margin: 0 0 rem-calc(72);
+    min-height: unset;
+    height: rem-calc(400);
+    margin: 0 ;
   }
+    @include breakpoint(large) {
+      height: rem-calc(600);
+
+    }
 
   .tagline {
     @include breakpoint(small) {

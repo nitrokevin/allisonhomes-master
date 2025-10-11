@@ -16,3 +16,27 @@ section article {
 		}
 	}
 }
+
+
+$foundation-gradients: ();
+
+@each $name,
+$color in $foundation-palette {
+  @if (lightness($color) > 15% and lightness($color) < 95%) {
+    $light: lighten($color, 12%);
+    $dark: darken($color, 8%);
+    $gradient: linear-gradient(135deg, $light 0%, $dark 100%);
+    $foundation-gradients: map-merge($foundation-gradients, ($name: $gradient));
+  }
+}
+
+$foundation-cross-gradients: ();
+$cross-pairs: (primary secondary, theme-color-1 theme-color-2, theme-color-3 theme-color-4, theme-color-4 theme-color-5);
+
+@each $pair in $cross-pairs {
+  $start: nth($pair, 1);
+  $end: nth($pair, 2);
+  $gradient: linear-gradient(135deg, map-get($foundation-palette, $start) 0%, map-get($foundation-palette, $end) 100%);
+  $foundation-cross-gradients: map-merge($foundation-cross-gradients, ($start + '-to-'+ $end: $gradient));
+}
+$all-gradients: map-merge($foundation-gradients, $foundation-cross-gradients);

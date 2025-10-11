@@ -33,7 +33,7 @@ add_filter('acf_the_content', 'a_unautop', 30);
 // GUTENBERG SUPPORT
 // ------------------------------------------------------------
 
-add_theme_support('align-wide');
+
 
 function custom_block_categories($categories) {
     return array_merge(
@@ -207,3 +207,82 @@ function avidd_social_links_inline_shortcode($atts) {
     return implode(' ', $links);
 }
 add_shortcode('social_links', 'avidd_social_links_inline_shortcode');
+
+/**
+ * Disable default WordPress Posts (but keep Pages and CPTs)
+ */
+add_action('admin_menu', function() {
+    remove_menu_page('edit.php'); // Hide "Posts" from the menu
+});
+
+add_action('wp_before_admin_bar_render', function() {
+    global $wp_admin_bar;
+    $wp_admin_bar->remove_menu('new-post'); // Remove "+ New → Post"
+});
+
+add_action('admin_init', function() {
+    global $pagenow;
+
+    // Block access only to default posts list or creation screens
+    if ($pagenow === 'edit.php' && (!isset($_GET['post_type']) || $_GET['post_type'] === 'post')) {
+        wp_redirect(admin_url());
+        exit;
+    }
+
+    // Block creating a new post (but not editing pages)
+    if ($pagenow === 'post-new.php' && (!isset($_GET['post_type']) || $_GET['post_type'] === 'post')) {
+        wp_redirect(admin_url());
+        exit;
+    }
+
+    // Block editing posts only
+    if ($pagenow === 'post.php') {
+        $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
+        if ($post_id) {
+            $post_type = get_post_type($post_id);
+            if ($post_type === 'post') {
+                wp_redirect(admin_url());
+                exit;
+            }
+        }
+    }
+});
+
+add_action('wp_dashboard_setup', function() {
+    remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
+    remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
+});
+
+
+//Custom Style for columns
+add_action( 'init', function() {
+    register_block_style(
+        'core/columns',
+        array(
+            'name'  => 'full-bleed',
+            'label' => __( 'Full Bleed', 'foundationpress' ),
+        )
+    );
+});
+
+
+
+
+add_filter( 'render_block', function( $block_content, $block ) {
+	if (
+		$block['blockName'] === 'core/column' &&
+		isset( $block['attrs']['className'] ) &&
+		str_contains( $block['attrs']['className'], 'is-style-full-bleed' )
+	) {
+		$image = get_field( 'column_background_image' );
+		if ( $image && isset( $image['url'] ) ) {
+			$style = 'background-image:url(' . esc_url( $image['url'] ) . ');';
+			$block_content = str_replace(
+				'class="wp-block-column',
+				'style="' . $style . '" class="wp-block-column',
+				$block_content
+			);
+		}
+	}
+	return $block_content;
+}, 10, 2 );

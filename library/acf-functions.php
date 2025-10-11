@@ -10,30 +10,7 @@ acf_add_local_field_group(array(
 	'title' => 'Page Options',
 	'fields' => array(
 	
-		array(
-			'key' => 'field_5c756acdc2285',
-			'label' => 'Background colour',
-			'name' => 'page_background_color',
-			'type' => 'swatch',
-			'instructions' => '',
-			'required' => 0,
-			'conditional_logic' => 0,
-			'wrapper' => array(
-				'width' => '25',
-				'class' => '',
-				'id' => '',
-			),
-			'choices' => $color_array,
-			'default_value' => array(
-			),
-			'allow_null' => 0,
-			'multiple' => 0,
-			'ui' => 1,
-			'ajax' => 0,
-			'layout' => 'horizontal',
-			'return_format' => 'label',
-			'placeholder' => '',
-		),
+		
 		
 	),
 	'location' => array(	
@@ -62,6 +39,53 @@ acf_add_local_field_group(array(
 	'description' => '',
 	'show_in_rest' => false,
 ));
+
+
+acf_add_local_field_group(array(
+	'key' => 'group_core_blocks',
+	'title' => 'Core Blocks',
+	'fields' => array(
+
+		array(
+		'key' => 'field_column_background_image',
+		'label' => 'Column background image',
+		'name' => 'column_background_image',
+		'type' => 'image',
+		'instructions' => '',
+		'required' => 0,
+		'conditional_logic' => 0,
+		'wrapper' => array(
+			'width' => '0',
+			'class' => '',
+			'id' => '',
+		),
+		'return_format' => 'array',
+		'preview_size' => 'thumbnail',
+		'library' => 'all',
+
+	),
+	
+	),
+	'location' => array(
+	array(
+		array(
+			'param' => 'block',
+			'operator' => '==',
+			'value' => 'core/column',
+		),
+	),
+),
+	'menu_order' => 0,
+	'position' => 'normal',
+	'style' => 'seamless',
+	'label_placement' => 'top',
+	'instruction_placement' => 'label',
+	'hide_on_screen' => '',
+	'active' => true,
+	'description' => '',
+	'show_in_rest' => false,
+));
+
 
 
 //FAQ OPTIONS PAGE
