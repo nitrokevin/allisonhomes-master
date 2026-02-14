@@ -10,5 +10,13 @@
         "mode": "preview",
         "renderTemplate": "template-parts/blocks/accordion.php"
     },
-    "align": "full"
+    "align": "full",
+     "supports": {
+       "color": {
+         "text": true,
+         "background": true,
+         "gradients": true,
+         "link": false
+       }
+     }
 }

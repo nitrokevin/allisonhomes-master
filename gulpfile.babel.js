@@ -14,6 +14,9 @@ import log from "fancy-log";
 import colors from "ansi-colors";
 import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
+import {
+  exec
+} from 'child_process';
 
 const sass = gulpSass(dartSass);
 // Load all Gulp plugins into one variable
@@ -100,6 +103,25 @@ function styles() {
   );
 }
 exports.styles = styles;
+
+// New task to run update-theme-json.js script
+function updateThemeJson(done) {
+  exec('node build/update-theme-json.js', function (err, stdout, stderr) {
+    if (err) {
+      log.error('[updateThemeJson:error]', err);
+      done(err);
+      return;
+    }
+    if (stdout) {
+      log('[updateThemeJson]', stdout);
+    }
+    if (stderr) {
+      log('[updateThemeJson]', stderr);
+    }
+    done();
+  });
+}
+gulp.task('updateThemeJson', updateThemeJson);
 
 // Webpack configuration with SCSS and CSS loaders added
 const webpack = {
@@ -244,13 +266,13 @@ function reload(done) {
 // Watch for changes
 function watch() {
   gulp.watch(PATHS.assets, copy);
-  gulp.watch("src/assets/scss/**/*.scss", styles).on("change", (path) => log("File " + colors.bold(colors.magenta(path)) + " changed.")).on("unlink", (path) => log("File " + colors.bold(colors.magenta(path)) + " was removed."));
+  gulp.watch("src/assets/scss/**/*.scss", gulp.series(updateThemeJson, styles)).on("change", (path) => log("File " + colors.bold(colors.magenta(path)) + " changed.")).on("unlink", (path) => log("File " + colors.bold(colors.magenta(path)) + " was removed."));
   gulp.watch("**/*.php", reload).on("change", (path) => log("File " + colors.bold(colors.magenta(path)) + " changed.")).on("unlink", (path) => log("File " + colors.bold(colors.magenta(path)) + " was removed."));
   gulp.watch("src/assets/images/**/*", gulp.series(images, reload));
 }
 
 // Build the "dist" folder by running all of the below tasks
-gulp.task("build", gulp.series(clean, gulp.parallel(styles, "webpack:build", images, copy)));
+gulp.task("build", gulp.series(updateThemeJson, clean, gulp.parallel(styles, "webpack:build", images, copy)));
 
 // Build the site, run the server, and watch for file changes
 gulp.task("default", gulp.series("build", server, gulp.parallel("webpack:watch", watch)));

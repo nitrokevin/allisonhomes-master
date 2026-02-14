@@ -1,9 +1,19 @@
+
 <?php
-
-
+require_once get_template_directory() . '/library/colors.php';
+// Helper: Returns array of palette HEX keys for Kirki, with safe fallback.
+if ( ! function_exists( 'get_kirki_palette' ) ) {
+	function get_kirki_palette() {
+		$choices = get_theme_design_choices([
+			'include_colors'    => true,
+			'include_gradients' => false,
+			'for_kirki'         => true,
+		]);
+		return (is_array($choices) && count($choices) > 0) ? array_keys($choices) : ['#000000'];
+	}
+}
 use Kirki\Util\Helper;
-include_once __DIR__ . '/colors.php';
-$color_array = array_values($colors);
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,13 +41,12 @@ new \Kirki\Panel(
 	]
 );
 
+// Section IDs and section registration with consistent IDs for fields and sections.
 $sections = [
-  'site_header'      => [ esc_html__( 'Site Header', 'avidd' ), '' ],
-  'site_footer'      => [ esc_html__( 'Site Footer', 'avidd' ), '' ],
-  'site_settings'      => [ esc_html__( 'Site Settings', 'avidd' ), '' ],
-  'social_media'      => [ esc_html__( 'Social Media', 'avidd' ), '' ],
-
-
+	'site_header_section'   => [ esc_html__( 'Site Header', 'avidd' ), '' ],
+	'site_footer_section'   => [ esc_html__( 'Site Footer', 'avidd' ), '' ],
+	'site_settings_section' => [ esc_html__( 'Site Settings', 'avidd' ), '' ],
+	'social_media_section'  => [ esc_html__( 'Social Media', 'avidd' ), '' ],
 ];
 
 foreach ( $sections as $section_id => $section ) {
@@ -49,7 +58,7 @@ foreach ( $sections as $section_id => $section ) {
 	if ( isset( $section[2] ) ) {
 		$section_args['type'] = $section[2];
 	}
-	new \Kirki\Section( str_replace( '-', '_', $section_id ) . '_section', $section_args );
+	new \Kirki\Section( $section_id, $section_args );
 }
 
 
@@ -62,45 +71,80 @@ new \Kirki\Section(
 	]
 );
 
+// Helper: get HEX default for a given SCSS variable or fallback.
+if ( ! function_exists( 'avidd_get_palette_hex_default' ) ) {
+	function avidd_get_palette_hex_default( $var_name, $fallback = '#000000' ) {
+		$choices = get_theme_design_choices( [
+			'include_colors'    => true,
+			'include_gradients' => false,
+			'for_kirki'         => true,
+		] );
+		// Find first color if no match
+		$first_hex = false;
+		foreach ( $choices as $hex => $name ) {
+			if ( ! $first_hex ) {
+				$first_hex = $hex;
+			}
+			// If the name matches the variable label, use it
+			if ( is_string( $var_name ) && $name && stripos( $var_name, $name ) !== false ) {
+				return $hex;
+			}
+		}
+		// Try to match by variable name key in colors.php
+		if ( function_exists( 'get_theme_color_palette' ) ) {
+			$palette = get_theme_color_palette();
+			if ( isset( $palette[ $var_name ] ) ) {
+				return $palette[ $var_name ];
+			}
+		}
+		return $first_hex ? $first_hex : $fallback;
+	}
+}
 
+// Always get a non-empty palette for Kirki fields, fallback to a default color if empty.
+$palette_keys = get_kirki_palette();
 new \Kirki\Field\Color_Palette(
 	[
 		'settings'    => 'color_palette_setting_0',
 		'label'       => esc_html__( 'Nav background colour', 'avidd' ),
 		'description' => esc_html__( '', 'avidd' ),
 		'section'     => 'site_header_section',
-		'default'     => 'transparent',
+		'default'     => $palette_keys[0],
 		'transport'   => 'postMessage',
 		'choices'     => [
-			'colors' => $color_array,
+			'colors' => $palette_keys,
 			'style'  => 'round',
 		],
-    'output'      => [
-      array(
-        'element'  => ' .top-bar, .top-bar ul, .title-bar,#mega-menu-wrap-top-bar-r',
-        'property' => 'background-color'
-      ),
-  ]
+		'output'      => [
+			[
+				'element'  => ' .top-bar, .top-bar ul, .title-bar,#mega-menu-wrap-top-bar-r',
+				'property' => 'background-color',
+			],
+		],
 	]
 );
+
+// Nav menu item colour
+// Ensure default is a valid hex from the palette
+$default_1 = in_array( avidd_get_palette_hex_default('$primary-color', $palette_keys[0] ), $palette_keys ) ? avidd_get_palette_hex_default('$primary-color', $palette_keys[0] ) : $palette_keys[0];
 new \Kirki\Field\Color_Palette(
 	[
 		'settings'    => 'color_palette_setting_1',
 		'label'       => esc_html__( 'Nav menu item colour', 'avidd' ),
 		'description' => esc_html__( '', 'avidd' ),
 		'section'     => 'site_header_section',
-		'default'     => '$primary-color',
+		'default'     => $default_1,
 		'transport'   => 'postMessage',
 		'choices'     => [
-			'colors' => $color_array,
+			'colors' => $palette_keys,
 			'style'  => 'round',
 		],
-    'output'      => [
-      array(
-        'element'  => '.top-bar, .desktop-menu a, .mobile-menu a',
-            'property' => 'color'
-      ),
-  ]
+		'output'      => [
+			[
+				'element'  => '.top-bar, .desktop-menu a, .mobile-menu a',
+				'property' => 'color',
+			],
+		],
 	]
 );
 new \Kirki\Field\Image(
@@ -111,7 +155,7 @@ new \Kirki\Field\Image(
 		'section'     => 'site_header_section',
 		'default'     => '',
 		'choices'     => [
-      'save_as' => 'id',
+			'save_as' => 'id',
 		],
 	]
 );
@@ -123,7 +167,7 @@ new \Kirki\Field\Image(
 		'section'     => 'site_header_section',
 		'default'     => '',
 		'choices'     => [
-      'save_as' => 'url',
+			'save_as' => 'url',
 		],
 	]
 );
@@ -167,45 +211,49 @@ new \Kirki\Field\Checkbox_Switch(
 	]
 );
 
-//Site Footer
+// Site Footer Palette Fields with safe palette fallback
+$palette_keys_footer = get_kirki_palette();
+// Ensure default is a valid hex from the palette
+$default_footer = in_array( avidd_get_palette_hex_default('#fefefe', $palette_keys_footer[0] ), $palette_keys_footer ) ? avidd_get_palette_hex_default('#fefefe', $palette_keys_footer[0] ) : $palette_keys_footer[0];
 new \Kirki\Field\Color_Palette(
 	[
 		'settings'    => 'color_palette_setting_3',
 		'label'       => esc_html__( 'Footer background colour', 'avidd' ),
 		'description' => esc_html__( '', 'avidd' ),
 		'section'     => 'site_footer_section',
-		'default'     => '#fefefe',
+		'default'     => $default_footer,
 		'transport'   => 'postMessage',
 		'choices'     => [
-			'colors' => $color_array,
+			'colors' => $palette_keys_footer,
 			'style'  => 'round',
 		],
-    'output'      => [
-      array(
-        'element'  => '.footer',
-        'property' => 'background-color'
-      ),
-  ]
+		'output'      => [
+			[
+				'element'  => '.footer',
+				'property' => 'background-color',
+			],
+		],
 	]
 );
+$default_footer_text = in_array( avidd_get_palette_hex_default('$primary-color', $palette_keys_footer[0] ), $palette_keys_footer ) ? avidd_get_palette_hex_default('$primary-color', $palette_keys_footer[0] ) : $palette_keys_footer[0];
 new \Kirki\Field\Color_Palette(
 	[
 		'settings'    => 'color_palette_setting_4',
 		'label'       => esc_html__( 'Footer text colour', 'avidd' ),
 		'description' => esc_html__( '', 'avidd' ),
 		'section'     => 'site_footer_section',
-		'default'     => '$primary-color',
+		'default'     => $default_footer_text,
 		'transport'   => 'postMessage',
 		'choices'     => [
-			'colors' => $color_array,
+			'colors' => $palette_keys_footer,
 			'style'  => 'round',
 		],
-    'output'      => [
-      array(
-        'element'  => '.footer, .footer a, .footer li',
-            'property' => 'color'
-      ),
-  ]
+		'output'      => [
+			[
+				'element'  => '.footer, .footer a, .footer li',
+				'property' => 'color',
+			],
+		],
 	]
 );
 new \Kirki\Field\Image(
@@ -216,7 +264,7 @@ new \Kirki\Field\Image(
 		'section'     => 'site_footer_section',
 		'default'     => '',
 		'choices'     => [
-      'save_as' => 'id',
+			'save_as' => 'id',
 		],
 	]
 );
@@ -227,26 +275,26 @@ new \Kirki\Field\Repeater(
 		'section'  => 'site_footer_section',
 		'priority' => 11,
 		'fields'   => [
-      'footer_image' =>[
-        'type'        => 'image',
-        'label'       => esc_html__( 'Footer image', 'avidd' ),
-        'description' => esc_html__( '', 'avidd' ),
-        'section'     => 'site_footer_section',
-        'default'     => '',
-        'choices'     => [
-          'save_as' => 'id',
-        ],
-      ],
-	  'link_url'    => [
-		'type'        => 'text',
-		'label'       => esc_html__( 'Link URL', 'avidd' ),
-		'default'     => '',
-	],
+			'footer_image' =>[
+				'type'        => 'image',
+				'label'       => esc_html__( 'Footer image', 'avidd' ),
+				'description' => esc_html__( '', 'avidd' ),
+				'section'     => 'site_footer_section',
+				'default'     => '',
+				'choices'     => [
+					'save_as' => 'id',
+				],
+			],
+			'link_url'    => [
+				'type'        => 'text',
+				'label'       => esc_html__( 'Link URL', 'avidd' ),
+				'default'     => '',
+			],
 		],
 	]
 );
 
-//Social Media
+// Social Media
 new \Kirki\Field\Checkbox_Switch(
 	[
 		'settings'    => 'social-instagram',
@@ -275,7 +323,7 @@ new \Kirki\Field\URL(
 				'value'    => true,
 			],
 		],
-	],
+	]
 );
 new \Kirki\Field\Checkbox_Switch(
 	[
@@ -305,7 +353,7 @@ new \Kirki\Field\URL(
 				'value'    => true,
 			],
 		],
-	],
+	]
 );
 new \Kirki\Field\Checkbox_Switch(
 	[
@@ -335,7 +383,7 @@ new \Kirki\Field\URL(
 				'value'    => true,
 			],
 		],
-	],
+	]
 );
 new \Kirki\Field\Checkbox_Switch(
 	[
@@ -365,7 +413,7 @@ new \Kirki\Field\URL(
 				'value'    => true,
 			],
 		],
-	],
+	]
 );
 new \Kirki\Field\Checkbox_Switch(
 	[
@@ -395,7 +443,7 @@ new \Kirki\Field\URL(
 				'value'    => true,
 			],
 		],
-	],
+	]
 );
 new \Kirki\Field\Checkbox_Switch(
 	[
@@ -425,32 +473,32 @@ new \Kirki\Field\URL(
 				'value'    => true,
 			],
 		],
-	],
+	]
 );
 
-//Site Settings
+// Site Settings Palette with fallback
+$palette_keys_settings = get_kirki_palette();
+$default_settings = in_array( avidd_get_palette_hex_default('#fefefe', $palette_keys_settings[0] ), $palette_keys_settings ) ? avidd_get_palette_hex_default('#fefefe', $palette_keys_settings[0] ) : $palette_keys_settings[0];
 new \Kirki\Field\Color_Palette(
 	[
 		'settings'    => 'color_palette_setting_10',
 		'label'       => esc_html__( 'Page background colour', 'avidd' ),
 		'description' => esc_html__( '', 'avidd' ),
 		'section'     => 'site_settings_section',
-		'default'     => '#fefefe',
+		'default'     => $default_settings,
 		'transport'   => 'postMessage',
 		'choices'     => [
-			'colors' => $color_array,
+			'colors' => $palette_keys_settings,
 			'style'  => 'round',
 		],
-    'output'      => [
-      array(
-        'element'  => 'body',
-        'property' => 'background-color'
-      ),
-  ]
+		'output'      => [
+			[
+				'element'  => 'body',
+				'property' => 'background-color',
+			],
+		],
 	]
 );
-
-
 
 new \Kirki\Field\Repeater(
 	[
@@ -459,17 +507,14 @@ new \Kirki\Field\Repeater(
 		'section'  => 'opening_times',
 		'priority' => 11,
 		'fields'   => [
-      'day' =>[
-        'type'        => 'text',
-        'label'       => esc_html__( 'Day', 'avidd' ),
-       
-      
-      ],
-	  'hours'    => [
-		'type'        => 'text',
-		'label'       => esc_html__( 'Hours', 'avidd' ),
-	
-	],
+			'day' =>[
+				'type'        => 'text',
+				'label'       => esc_html__( 'Day', 'avidd' ),
+			],
+			'hours'    => [
+				'type'        => 'text',
+				'label'       => esc_html__( 'Hours', 'avidd' ),
+			],
 		],
 	]
 );

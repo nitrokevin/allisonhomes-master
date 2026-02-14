@@ -1,42 +1,65 @@
+section,
+div {
 
-section, div {
-	@each $color, $code in $foundation-palette {
-		&.#{$color} {
-			background-color: $code;
-			color:color-pick-contrast($code, $colors: ($white, $black, $primary-color, $secondary-color), $tolerance: $global-color-pick-contrast-tolerance) !important;
-			
-		}
-	}
+  @each $color,
+  $code in $foundation-palette {
+    &.#{$color} {
+      background-color: $code;
+      color: color-pick-contrast($code, $colors: ($white, $black, $primary-color, $secondary-color), $tolerance: $global-color-pick-contrast-tolerance) !important;
+
+    }
+  }
 }
+
 section article {
-	@each $color, $code in $foundation-palette {
-		&.#{$color} {
-			background-color: $code;
-			color:color-pick-contrast($code, $colors: ($white, $black, $primary-color, $secondary-color), $tolerance: $global-color-pick-contrast-tolerance) !important;
-		}
-	}
+
+  @each $color,
+  $code in $foundation-palette {
+    &.#{$color} {
+      background-color: $code;
+      color: color-pick-contrast($code, $colors: ($white, $black, $primary-color, $secondary-color), $tolerance: $global-color-pick-contrast-tolerance) !important;
+    }
+  }
 }
 
+// ------------------------------------
+// Auto-generate gradients from Foundation palette
+// ------------------------------------
 
 $foundation-gradients: ();
 
 @each $name,
 $color in $foundation-palette {
-  @if (lightness($color) > 15% and lightness($color) < 95%) {
-    $light: lighten($color, 12%);
-    $dark: darken($color, 8%);
+  @if type-of($color)=='color'and lightness($color)>15% and lightness($color) < 95% {
+    $light: scale-color($color, $lightness: 15%);
+    $dark: scale-color($color, $lightness: -10%);
     $gradient: linear-gradient(135deg, $light 0%, $dark 100%);
     $foundation-gradients: map-merge($foundation-gradients, ($name: $gradient));
   }
 }
 
+// ------------------------------------
+// Optional: Define cross-palette gradients
+// ------------------------------------
+$cross-pairs: (primary secondary,
+  secondary theme-color-1,
+  primary theme-color-1);
+
 $foundation-cross-gradients: ();
-$cross-pairs: (primary secondary, theme-color-1 theme-color-2, theme-color-3 theme-color-4, theme-color-4 theme-color-5);
 
 @each $pair in $cross-pairs {
   $start: nth($pair, 1);
   $end: nth($pair, 2);
-  $gradient: linear-gradient(135deg, map-get($foundation-palette, $start) 0%, map-get($foundation-palette, $end) 100%);
-  $foundation-cross-gradients: map-merge($foundation-cross-gradients, ($start + '-to-'+ $end: $gradient));
+
+  @if map-has-key($foundation-palette, $start) and map-has-key($foundation-palette, $end) {
+    $gradient: linear-gradient(135deg,
+        map-get($foundation-palette, $start) 0%,
+        map-get($foundation-palette, $end) 100%);
+
+    $foundation-cross-gradients: map-merge($foundation-cross-gradients,
+      (#{$start}-#{$end}: $gradient));
+  }
 }
+
+// Merge all gradients together
 $all-gradients: map-merge($foundation-gradients, $foundation-cross-gradients);

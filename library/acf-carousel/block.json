@@ -1,14 +1,22 @@
 {
-    "name": "acf/carousel",
-    "title": "Carousel",
-    "description": "Display carousel of people or a custom slider",
-    "style": [ "file:./dist/assets/css/editor.css" ],
-    "category": "avidd-blocks",
-    "icon": "slides",
-    "keywords": ["carousel"],
-    "acf": {
-        "mode": "preview",
-        "renderTemplate": "template-parts/blocks/carousel.php"
-    },
-    "align": "full"
+  "name": "acf/carousel",
+  "title": "Carousel",
+  "description": "Display carousel of people or a custom slider",
+  "style": ["file:./dist/assets/css/editor.css"],
+  "category": "avidd-blocks",
+  "icon": "slides",
+  "keywords": ["carousel"],
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "template-parts/blocks/carousel.php"
+  },
+  "align": "full",
+  "supports": {
+    "color": {
+      "text": true,
+      "background": true,
+      "gradients": true,
+      "link": false
+    }
+  }
 }

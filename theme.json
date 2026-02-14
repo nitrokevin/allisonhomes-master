@@ -1,0 +1,161 @@
+{
+  "version": 3,
+  "settings": {
+    "color": {
+      "custom": false,
+      "customGradient": false,
+      "defaultPalette": false,
+      "defaultGradients": false,
+      "gradients": [
+        {
+          "slug": "primary",
+          "name": "Primary Light → Dark",
+          "gradient": "linear-gradient(135deg, #857f93, #352f43)"
+        },
+        {
+          "slug": "secondary",
+          "name": "Secondary Light → Dark",
+          "gradient": "linear-gradient(135deg, #e0b628, #906600)"
+        },
+        {
+          "slug": "light-gray",
+          "name": "Light-gray Light → Dark",
+          "gradient": "linear-gradient(135deg, #ffffff, #bebebe)"
+        },
+        {
+          "slug": "medium-gray",
+          "name": "Medium-gray Light → Dark",
+          "gradient": "linear-gradient(135deg, #f2f2f2, #a2a2a2)"
+        },
+        {
+          "slug": "dark-gray",
+          "name": "Dark-gray Light → Dark",
+          "gradient": "linear-gradient(135deg, #727272, #222222)"
+        },
+        {
+          "slug": "theme-color-1",
+          "name": "Theme-color-1 Light → Dark",
+          "gradient": "linear-gradient(135deg, #a6cfc1, #567f71)"
+        },
+        {
+          "slug": "theme-color-2",
+          "name": "Theme-color-2 Light → Dark",
+          "gradient": "linear-gradient(135deg, #ffffff, #c9b6b6)"
+        },
+        {
+          "slug": "theme-color-3",
+          "name": "Theme-color-3 Light → Dark",
+          "gradient": "linear-gradient(135deg, #ffe2e2, #bb9292)"
+        },
+        {
+          "slug": "theme-color-4",
+          "name": "Theme-color-4 Light → Dark",
+          "gradient": "linear-gradient(135deg, #ffffd0, #d7c580)"
+        },
+        {
+          "slug": "theme-color-5",
+          "name": "Theme-color-5 Light → Dark",
+          "gradient": "linear-gradient(135deg, #b5556b, #65051b)"
+        },
+        {
+          "slug": "primary-secondary",
+          "name": "Primary → Secondary",
+          "gradient": "linear-gradient(135deg, #5d576b, #B88E00)"
+        },
+        {
+          "slug": "secondary-theme-color-1",
+          "name": "Secondary → Theme-color-1",
+          "gradient": "linear-gradient(135deg, #B88E00, #7ea799)"
+        },
+        {
+          "slug": "primary-theme-color-1",
+          "name": "Primary → Theme-color-1",
+          "gradient": "linear-gradient(135deg, #5d576b, #7ea799)"
+        }
+      ],
+      "palette": [
+        {
+          "slug": "primary",
+          "name": "Primary",
+          "color": "#5d576b"
+        },
+        {
+          "slug": "secondary",
+          "name": "Secondary",
+          "color": "#B88E00"
+        },
+        {
+          "slug": "light-gray",
+          "name": "Light-gray",
+          "color": "#e6e6e6"
+        },
+        {
+          "slug": "medium-gray",
+          "name": "Medium-gray",
+          "color": "#cacaca"
+        },
+        {
+          "slug": "dark-gray",
+          "name": "Dark-gray",
+          "color": "#4A4A4A"
+        },
+        {
+          "slug": "theme-color-1",
+          "name": "Theme-color-1",
+          "color": "#7ea799"
+        },
+        {
+          "slug": "theme-color-2",
+          "name": "Theme-color-2",
+          "color": "#F1DEDE"
+        },
+        {
+          "slug": "theme-color-3",
+          "name": "Theme-color-3",
+          "color": "#E3BABA"
+        },
+        {
+          "slug": "theme-color-4",
+          "name": "Theme-color-4",
+          "color": "#FFEDA8"
+        },
+        {
+          "slug": "theme-color-5",
+          "name": "Theme-color-5",
+          "color": "#8D2D43"
+        },
+        {
+          "slug": "white",
+          "name": "White",
+          "color": "#fefefe"
+        },
+        {
+          "slug": "black",
+          "name": "Black",
+          "color": "#00050C"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "slug": "base",
+          "name": "Base",
+          "fontFamily": "'Lato', Helvetica, Roboto, Arial, sans-serif"
+        },
+        {
+          "slug": "mono",
+          "name": "Monospace",
+          "fontFamily": "Consolas, 'Liberation Mono', Courier, monospace"
+        }
+      ]
+    },
+    "border": {
+      "radius": "0.5rem"
+    },
+    "layout": {
+      "contentSize": "800px",
+      "wideSize": "1200px"
+    }
+  }
+}

@@ -3,65 +3,82 @@ Frontend styles for gutenberg blocks
 */
 
 /** === Base Color Palatte === */
-@each $color, $code in $foundation-palette {
+/** === Solid Colors === */
+@each $color,
+$code in $foundation-palette {
 
   .has-#{$color}-background-color {
-      background-color: $code;
-      color:color-pick-contrast($code, $colors: ($white, $black, $primary-color, $secondary-color), $tolerance: $global-color-pick-contrast-tolerance);
+    background-color: $code;
+    color: color-pick-contrast($code,
+        $colors: ($white, $black, $primary-color, $secondary-color),
+        $tolerance: $global-color-pick-contrast-tolerance);
   }
 
   .has-#{$color}-color {
-      color: $code;
+    color: $code;
   }
 
   .wp-block-button__link.has-#{$color}-background-color {
-      background-color: $code;
-      transition: background-color .25s ease-out,
-                  color .25s ease-out;
+    background-color: $code;
+    transition: background-color .25s ease-out,
+      color .25s ease-out;
   }
 
   .wp-block-button__link.has-#{$color}-color {
-      color: $code;
+    color: $code;
   }
 }
 
+/** === Gradients === */
 
+
+// Apply gradients and text colors
+@each $gradient,
+$settings in $all-gradients {
+  .has-#{$gradient}-gradient-background {
+    background: $settings;
+
+  }
+}
 
 /** === Button === */
 .wp-block-button {
 
-	// add general foundation button styling
-	.wp-block-button__link {
-		@extend .button;
-	}
+  // add general foundation button styling
+  .wp-block-button__link {
+    @extend .button;
+  }
 
-	// add special styling for squared buttons
-	&.is-style-squared .wp-block-button__link {
-		border-radius: 0;
-	}
+  // add special styling for squared buttons
+  &.is-style-squared .wp-block-button__link {
+    border-radius: 0;
+  }
 
-	// add outline styles
-	&.is-style-outline .wp-block-button__link{
-		@extend .hollow;
+  // add outline styles
+  &.is-style-outline .wp-block-button__link {
+    @extend .hollow;
     background: transparent;
-	}
+  }
 }
 
 /** === File === */
-.wp-block-file .wp-block-file__button{
+.wp-block-file .wp-block-file__button {
   @include button();
 }
 
 /** === Group === */
 .wp-block-group.alignfull {
-  margin-left: calc( -50vw + 50%  );
-  margin-right: calc( -50vw + 50% );
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
   max-width: 100vw;
-  padding:$global-padding 0;
+  padding: $global-padding 0;
   overflow-x: hidden;
-  .wp-block-group__inner-container{
+
+  .wp-block-group__inner-container {
     @include xy-grid-container;
-    @each $breakpoint, $size in $grid-margin-gutters {
+
+    @each $breakpoint,
+    $size in $grid-margin-gutters {
       @include breakpoint($breakpoint) {
         padding: $global-padding $size;
       }
@@ -70,33 +87,45 @@ Frontend styles for gutenberg blocks
 }
 
 @mixin table-borders($color) {
-  @include breakpoint(small){
+  @include breakpoint(small) {
     border: 2px solid $color;
   }
-  @include breakpoint(medium){
+
+  @include breakpoint(medium) {
     border: 6px solid $color;
   }
 }
 
-.wp-block-table thead, .wp-block-table tbody, .wp-block-table tfoot, .wp-block-table tbody tr, .wp-block-table td, .wp-block-table th {
+.wp-block-table thead,
+.wp-block-table tbody,
+.wp-block-table tfoot,
+.wp-block-table tbody tr,
+.wp-block-table td,
+.wp-block-table th {
   @include table-borders($white);
 }
 
 .has-light-gray-background-color {
-  .wp-block-table thead, .wp-block-table tbody, .wp-block-table tfoot, .wp-block-table tbody tr, .wp-block-table td, .wp-block-table th {
+
+  .wp-block-table thead,
+  .wp-block-table tbody,
+  .wp-block-table tfoot,
+  .wp-block-table tbody tr,
+  .wp-block-table td,
+  .wp-block-table th {
     @include table-borders($light-gray);
   }
 }
 
 .wp-block-table {
-  @include breakpoint(small){
+  @include breakpoint(small) {
     font-size: rem-calc(14);
   }
-  @include breakpoint(medium){
+
+  @include breakpoint(medium) {
     font-size: rem-calc(16);
   }
 }
-
 
 /** === Columns === */
 
@@ -105,40 +134,44 @@ Frontend styles for gutenberg blocks
     flex-wrap: nowrap !important;
   }
 }
+
 @media (max-width: 639px) {
   .wp-block-columns {
     flex-wrap: wrap !important;
   }
 }
 
-.wp-block-columns{
-  &.alignfull{
-      margin-left: calc(-50vw + 50%);
-      margin-right: calc(-50vw + 50%);
-      max-width: 100vw;
-        @each $breakpoint,
-        $size in $grid-margin-gutters {
-          @include breakpoint($breakpoint) {
-            padding-left: $size;
-            padding-right: $size;
-          }
-        }
-  }
-    &.alignwide {
-      margin-left: calc(-50vw + 50%);
-      margin-right: calc(-50vw + 50%);
-      max-width: 100vw;
+.wp-block-columns {
+  &.alignfull {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    max-width: 100vw;
 
-      @each $breakpoint,
-      $size in $grid-margin-gutters {
-        @include breakpoint($breakpoint) {
-          padding-left: $size*4;
-          padding-right: $size*4;
-        }
+    @each $breakpoint,
+    $size in $grid-margin-gutters {
+      @include breakpoint($breakpoint) {
+        padding-left: $size;
+        padding-right: $size;
       }
     }
+  }
+
+  &.alignwide {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    max-width: 100vw;
+
+    @each $breakpoint,
+    $size in $grid-margin-gutters {
+      @include breakpoint($breakpoint) {
+        padding-left: $size*4;
+        padding-right: $size*4;
+      }
+    }
+  }
 
 }
+
 // Full Bleed styling
 .wp-block-columns.is-style-full-bleed {
   position: relative;
@@ -148,6 +181,13 @@ Frontend styles for gutenberg blocks
     position: relative;
     padding: $global-padding 0;
     background: transparent; // column itself transparent
+    &::before{
+      content: "";
+       background: var(--column-bg);
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+    }
 
     @include breakpoint(medium) {
       padding: $global-padding;
@@ -172,6 +212,8 @@ Frontend styles for gutenberg blocks
   @each $color,
   $code in $foundation-palette {
     .wp-block-column.has-#{$color}-background-color {
+      background: transparent !important;
+      
       &::before {
         content: "";
         position: absolute;
@@ -215,46 +257,49 @@ Frontend styles for gutenberg blocks
   // ------------------------------------
   // GRADIENT BACKGROUNDS
   // ------------------------------------
- @each $gradient,
- $definition in $all-gradients {
-   .wp-block-column.has-#{$gradient}-gradient-background {
-     &::before {
-       content: "";
-       position: absolute;
-       top: 0;
-       left: 0;
-       margin-left: calc(50% - 50vw);
-       width: 100vw;
-       height: 100%;
-       z-index: -1;
-       background: $definition; // gradient definition
+  @each $slug,
+  $gradient in $all-gradients {
+    .wp-block-column.has-#{$slug}-gradient-background {
+      background: transparent !important;
 
-       @include breakpoint(medium) {
-         margin-left: calc(100% - 50vw);
-         width: 50vw;
-       }
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin-left: calc(50% - 50vw);
+        width: 100vw;
+        height: 100%;
+        z-index: -1;
+        background: $gradient;
+        
 
-       @include breakpoint(large) {
-         margin-left: calc(100% - 50vw);
-         width: 50vw;
-       }
-     }
+        @include breakpoint(medium) {
+          margin-left: calc(100% - 50vw);
+          width: 50vw;
+        }
 
-     &:last-child::before {
-       left: auto;
-       right: 0;
-       margin-right: calc(50% - 50vw);
+        @include breakpoint(large) {
+          margin-left: calc(100% - 50vw);
+          width: 50vw;
+        }
+      }
 
-       @include breakpoint(medium) {
-         margin-right: calc(100% - 50vw);
-         width: 50vw;
-       }
+      &:last-child::before {
+        left: auto;
+        right: 0;
+        margin-right: calc(50% - 50vw);
 
-       @include breakpoint(large) {
-         margin-right: calc(100% - 50vw);
-         width: 50vw;
-       }
-     }
-   }
- }
+        @include breakpoint(medium) {
+          margin-right: calc(100% - 50vw);
+          width: 50vw;
+        }
+
+        @include breakpoint(large) {
+          margin-right: calc(100% - 50vw);
+          width: 50vw;
+        }
+      }
+    }
+  }
 }
